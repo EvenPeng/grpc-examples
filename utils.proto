@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package utils;
+
+service UtilServer {
+	rpc Sort (DoubleArray) returns (DoubleArray) {}
+	rpc FindMin (DoubleArray) returns (Double) {}
+	rpc FindMax (stream Double) returns (Double) {}
+}
+
+message Double {
+	double value = 1;
+}
+
+message DoubleArray {
+	repeated double array = 1;
+}
