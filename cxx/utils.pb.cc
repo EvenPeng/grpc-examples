@@ -123,15 +123,15 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\013utils.proto\022\005utils\"\027\n\006Double\022\r\n\005value\030"
-      "\001 \001(\001\"\034\n\013DoubleArray\022\r\n\005array\030\001 \003(\0012\233\001\n\n"
-      "UtilServer\0220\n\004Sort\022\022.utils.DoubleArray\032\022"
-      ".utils.DoubleArray\"\000\022.\n\007FindMin\022\022.utils."
-      "DoubleArray\032\r.utils.Double\"\000\022+\n\007FindMax\022"
-      "\r.utils.Double\032\r.utils.Double\"\000(\001b\006proto"
-      "3"
+      "\001 \001(\001\"\034\n\013DoubleArray\022\r\n\005array\030\001 \003(\0012\234\001\n\013"
+      "UtilsServer\0220\n\004Sort\022\022.utils.DoubleArray\032"
+      "\022.utils.DoubleArray\"\000\022.\n\007FindMin\022\022.utils"
+      ".DoubleArray\032\r.utils.Double\"\000\022+\n\007FindMax"
+      "\022\r.utils.Double\032\r.utils.Double\"\000(\001b\006prot"
+      "o3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 241);
+      descriptor, 242);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "utils.proto", &protobuf_RegisterTypes);
 }

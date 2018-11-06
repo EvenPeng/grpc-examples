@@ -12,10 +12,10 @@ using grpc::Status;
 
 using utils::Double;
 using utils::DoubleArray;
-using utils::UtilServer;
+using utils::UtilsServer;
 
 // Logic and data behind the server's behavior.
-class UtilServerImpl final : public UtilServer::Service {
+class UtilsServerImpl final : public UtilsServer::Service {
 	Status Sort(ServerContext* context, const DoubleArray* request, DoubleArray* response) override {
 		
 		return Status::OK;
@@ -24,7 +24,7 @@ class UtilServerImpl final : public UtilServer::Service {
 
 void RunServer() {
   std::string server_address("0.0.0.0:6666");
-  UtilServerImpl service;
+  UtilsServerImpl service;
 
   ServerBuilder builder;
   // Listen on the given address without any authentication mechanism.

@@ -12,9 +12,12 @@ GRPC_CPP_PLUGIN_PATH ?= `which $(GRPC_CPP_PLUGIN)`
 PROTOS_PATH = ../protos
 vpath %.proto $(PROTOS_PATH)
 
-all: utils_server
+all: utils_server utils_client
 
 utils_server: utils.pb.o utils.grpc.pb.o utils_server.o
+	$(CXX) $^ $(LDFLAGS) -o $@
+
+utils_client: utils.pb.o utils.grpc.pb.o utils_client.o
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 .PRECIOUS: %.pb.cc
@@ -26,4 +29,4 @@ utils_server: utils.pb.o utils.grpc.pb.o utils_server.o
 	$(PROTOC) -I $(PROTOS_PATH) --grpc_out=. --plugin=protoc-gen-grpc=$(GRPC_CPP_PLUGIN_PATH) $<	
 
 clean:
-	rm -f *.o *.pb.cc *.pb.h utils_server
+	rm -f *.o *.pb.cc *.pb.h utils_server utils_client

@@ -3,3 +3,4 @@
 *.o
 
 utils_server
+utils_client

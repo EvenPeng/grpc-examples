@@ -25,10 +25,10 @@ class ServerContext;
 
 namespace utils {
 
-class UtilServer final {
+class UtilsServer final {
  public:
   static constexpr char const* service_full_name() {
-    return "utils.UtilServer";
+    return "utils.UtilsServer";
   }
   class StubInterface {
    public:
