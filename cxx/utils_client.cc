@@ -59,21 +59,34 @@ class UtilsServerClient {
     std::unique_ptr<UtilsServer::Stub> stub_;
 };
 
-bool test_Sum(int len) {
-    std::vector<double> array(len);
-    double ans = 0;
-
-    std::default_random_engine generator;
-    std::uniform_real_distribution<double> distribution(0.0, 1.0);
-
-    for (int i = 0; i < len; i++) {
-        array[i] = distribution(generator);
-        ans += array[i];
-    }
-
+UtilsServerClient Connect_to_server(void) {
     UtilsServerClient server(grpc::CreateChannel(
         "localhost:6666", grpc::InsecureChannelCredentials()));
 
+	return server;
+}
+
+template<class T> std::vector<T> Generate_vector(int len) {
+    std::vector<T> array(len);
+
+    std::default_random_engine generator;
+    std::uniform_real_distribution<T> distribution(0.0, 1.0);
+
+    for (int i = 0; i < len; i++) {
+        array[i] = distribution(generator);
+    }
+
+	return array;
+}
+
+bool Test_Sum(int len) {
+	std::vector<double> array = Generate_vector<double>(len);
+	double ans = 0.0;
+	for (auto& n: array) {
+		ans += n;
+	}
+
+	UtilsServerClient server = Connect_to_server();
     double grpc_ans = server.Sum(array);
 
     if (ans != grpc_ans) {
@@ -87,13 +100,8 @@ bool test_Sum(int len) {
     }
 }
 
-void test_all() { test_Sum(10); }
-
 int main(int argc, char **argv) {
-    // UtilsServerClient server(grpc::CreateChannel(
-    //     "localhost:6666", grpc::InsecureChannelCredentials()));
-
-    test_all();
+	Test_Sum(1000);
 
     return 0;
 }
