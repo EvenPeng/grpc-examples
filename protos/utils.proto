@@ -3,6 +3,7 @@ syntax = "proto3";
 package utils;
 
 service UtilsServer {
+	rpc Sum (DoubleArray) returns (Double) {}
 	rpc Sort (DoubleArray) returns (DoubleArray) {}
 	rpc FindMin (DoubleArray) returns (Double) {}
 	rpc FindMax (stream Double) returns (Double) {}
