@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <algorithm>
 
 #include <grpc++/grpc++.h>
 #include "utils.grpc.pb.h"
@@ -33,7 +34,21 @@ class UtilsServerImpl final : public UtilsServer::Service {
 
     Status Sort(ServerContext *context, const DoubleArray *request,
                 DoubleArray *response) override {
+        std::cout << "[Sort] Get request" << std::endl;
+		int len = request->array_size();
+		std::vector<double> array(len);
 
+		for (int i = 0; i < len; i++) {
+			array[i] = request->array(i);
+		}
+
+		std::sort(array.begin(), array.end());
+		
+		for (int i = 0; i < len; i++) {
+			response->add_array(array[i]);
+		}
+
+        std::cout << "[Sort] Done" << std::endl;
         return Status::OK;
     }
 };

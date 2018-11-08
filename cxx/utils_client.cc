@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <random>
+#include <algorithm>
 
 #include <grpc/grpc.h>
 #include <grpc++/grpc++.h>
@@ -26,7 +27,7 @@ class UtilsServerClient {
     UtilsServerClient(std::shared_ptr<Channel> channel)
         : stub_(UtilsServer::NewStub(channel)) {}
 
-    double Sum(std::vector<double> &array) {
+    double Sum(std::vector<double>& array) {
         ClientContext context;
 
         DoubleArray request;
@@ -46,13 +47,29 @@ class UtilsServerClient {
         return response.value();
     }
 
-    void Sort() {
+	std::vector<double> Sort(std::vector<double>& array) {
         ClientContext context;
 
-        // if (!status.ok()) {
-        //   std::cout << status.error_code() << ": " << status.error_message()
-        //             << std::endl;
-        // }
+        DoubleArray request;
+        DoubleArray response;
+
+        for (int i = 0; i < array.size(); i++) {
+            request.add_array(array[i]);
+        }
+
+        Status status = stub_->Sort(&context, request, &response);
+
+		std::vector<double> ans_array(response.array_size());
+		for (int i = 0; i < ans_array.size(); i++) {
+			ans_array[i] = response.array(i);
+		}
+
+        if (!status.ok()) {
+          std::cout << status.error_code() << ": " << status.error_message()
+                    << std::endl;
+        }
+
+		return ans_array;
     }
 
   private:
@@ -90,18 +107,38 @@ bool Test_Sum(int len) {
     double grpc_ans = server.Sum(array);
 
     if (ans != grpc_ans) {
-        std::cout << "[FAILED] test_sum" << std::endl;
+        std::cout << "[FAILED] Test_Sum" << std::endl;
         std::cout << "[FAILED] ans = " << ans << ", grpc_ans = " << grpc_ans
                   << std::endl;
         return false;
     } else {
-        std::cout << "[PASSED] test_sum, ans = " << ans << std::endl;
+        std::cout << "[PASSED] Test_Sum, ans = " << ans << std::endl;
         return true;
     }
 }
 
+bool Test_Sort(int len) {
+	std::vector<double> array = Generate_vector<double>(len);
+
+	UtilsServerClient server = Connect_to_server();
+	std::vector<double> grpc_array = server.Sort(array);
+
+	std::sort(array.begin(), array.end());
+
+	for (int i = 0; i < array.size(); i++) {
+		if (array[i] != grpc_array[i]) {
+    	    std::cout << "[FAILED] Test_Sort" << std::endl;
+    	    return false;
+		}
+	}
+
+    std::cout << "[PASSED] Test_Sum" << std::endl;
+    return true;
+}
+
 int main(int argc, char **argv) {
 	Test_Sum(1000);
+	Test_Sort(1000);
 
     return 0;
 }
